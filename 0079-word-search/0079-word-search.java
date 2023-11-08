@@ -1,13 +1,14 @@
 class Solution {
-    public boolean exist(char[][] board, String word) {
-        int n=board.length;
-        int m=board[0].length;
-        boolean[][] vis=new boolean[n][m];
-        for(int i=0;i<n;i++){
-            for(int j=0;j<m;j++){
-                char ch=board[i][j];
+    public boolean exist(char[][] board,String word){
+        int m=board.length;
+        int n=board[0].length;
+        boolean[][] visited=new boolean[m][n];
+        for(int row=0;row<m;row++){
+            for(int col=0;col<n;col++){
+                char  ch=board[row][col];
                 if(ch==word.charAt(0)){
-                    if(helper(board,i,j,word,0,vis)==true){
+                    boolean ans=helper(board,word,row,col,0,visited);
+                    if(ans==true){
                         return true;
                     }
                 }
@@ -15,21 +16,25 @@ class Solution {
         }
         return false;
     }
-    public boolean helper(char[][] board,int i,int j,String word,int ind,boolean[][] vis){
-         if(ind>=word.length()){
+
+    public boolean helper(char[][] board,String word,int row,int col,int ind,boolean[][] visited){
+        if(ind>=word.length()){
             return true;
         }
-        if(i<0 || i>=board.length || j<0 || j>=board[0].length || vis[i][j]==true || board[i][j]!=word.charAt(ind)){
+        if(row<0 || row>=board.length || col<0 || col>=board[0].length || board[row][col]!=word.charAt  (ind) || visited[row][col]==true){
             return false;
         }
         int[] dirx={-1,1,0,0};
         int[] diry={0,0,1,-1};
-        vis[i][j]=true;
-        for(int k=0;k<4;k++){
-            boolean ans=helper(board,i+dirx[k],j+diry[k],word,ind+1,vis);
-            if(ans==true) return true;
+        visited[row][col]=true;
+        for(int i=0;i<4;i++){
+        boolean ans=helper(board,word,row+dirx[i],col+diry[i],ind+1,visited);
+        if(ans==true){
+                return true;
+            }
         }
-        vis[i][j]=false;
+        visited[row][col]=false;
         return false;
     }
+
 }
